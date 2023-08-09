@@ -10,6 +10,21 @@
 </head>
 <body>
 	<p>セッションについて記事を参考に試す</p>
+	@guest
+		<div>
+			<button><a href="{{ route('login') }}">ログイン</a></button>
+			<button><a href="{{ route('register') }}">会員登録</a></button>
+		</div>
+	@endguest
+	@auth
+		<div>
+			<form action="{{ route('logout') }}" method="post">
+			@csrf
+				<button type="submit">ログアウト</button>
+			</form>
+			<p>※カートの中身（セッション）も一緒に消えます</p>
+		</div>	
+	@endauth
 	<div>
 		<h2>商品一覧</h2>
 		<table>
@@ -107,6 +122,7 @@
 		@csrf
 			<button id="confirmation" type="submit">購入する</button>
 		</form>
+		<p>ログインしていない場合、ログイン画面が表示されます</p>
 	@endif
 </body>
 </html>

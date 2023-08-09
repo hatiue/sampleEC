@@ -13,7 +13,6 @@ class ToCartController extends Controller
     // 「カートに入れる」ボタンの挙動
     public function __invoke(ToCartRequest $request, GoodService $service)
     {
-        // dd(session()->all());
         $goodscode = $request->goodscode();
         $name = $service->searchGoodNameInTestcart($goodscode);
         $price = $request->price();
@@ -22,8 +21,6 @@ class ToCartController extends Controller
         $request->session()->put($goodscode, ['price' => $price, 'quantity' => $quantity]); // 同じキーなら上書きしてくれる
         $cart = $service->totalCart(session()->all());
         $goods = $service->getAllGoods();
-        // dd($cart);
-        // dd($goods);
         return view('shopping', ['goods' => $goods, 'cart' => $cart])->with('toCart', "{$name}を{$quantity}つカートに追加しました！");
     }
 }

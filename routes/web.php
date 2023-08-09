@@ -15,24 +15,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/test', function () {
+    return view('test');
 });
 
 Route::get('/sampleEC', \App\Http\Controllers\IndexController::class)
     ->name('home');
-Route::post('/sampleEC/add', \App\Http\Controllers\AddGoodsController::class)
-    ->name('add'); // 商品追加
+Route::post('/sampleEC', \App\Http\Controllers\AddGoodsController::class)
+    ->name('add'); // 商品追加 下記cartと同じく/addを削除
 Route::get('/sampleEC/shopping', \App\Http\Controllers\ShoppingController::class)
     ->name('shopping'); // 商品ページ
-Route::post('/sampleEC/shopping/cart', \App\Http\Controllers\ToCartController::class)
-    ->name('cart'); // カートに追加
-Route::post('/sampleEC/shopping/confirmation', \App\Http\Controllers\ConfirmationController::class)
-    ->name('confirmation'); // カートの中身確認
-Route::post('/sampleEC/shopping/purchase', \App\Http\Controllers\PurchaseController::class)
-    ->name('purchase'); // 購入確定
+Route::post('/sampleEC/shopping', \App\Http\Controllers\ToCartController::class)
+    ->name('cart'); // カートに追加 動作に独自urlを振るとログイン後のリダイレクトでメソッド由来のエラーになるため、商品ページと共通に
 Route::get('/sampleEC/shopping/sessionReset', [HandyController::class, 'sessionReset'])
     ->name('reset'); // セッション削除
+
+Route::post('/sampleEC/shopping/confirmation', \App\Http\Controllers\ConfirmationController::class)
+    ->middleware('auth')
+    ->name('confirmation'); // カートの中身確認
+Route::post('/sampleEC/shopping/purchase', \App\Http\Controllers\PurchaseController::class)
+    ->middleware('auth')
+    ->name('purchase'); // 購入確定
 
 Route::get('/sampleEC/test', function () {
     return view('item');

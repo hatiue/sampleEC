@@ -21,9 +21,7 @@ class GoodService
     public function searchGoodNameInTestcart($code)
     {
         $row = Good::select('name')->where('code', $code)->firstOrFail(); // 商品コードはprimaryキー
-        // dd($row);
         $array = $row->toArray();
-        // dd($array);
         return $array["name"];
     }
 
@@ -40,11 +38,9 @@ class GoodService
                 $codes[] = $value;
             }
         }
-        //dd($codes);
         
         // ビューファイルで扱うための配列を作成する
         $cart = [];
-        //dd($sessionArray);
         foreach($sessionArray as $key => $value) {
             if(in_array($key, $codes)) {
                 $name = $this->searchGoodNameInTestcart($key);
@@ -52,14 +48,15 @@ class GoodService
             }
         }
         ksort($cart);
-        // dd($cart);
         return $cart;
     }
 
-    public function orderHistory($userId) {
+    public function orderHistory($userId)
+    {
         // ユーザーの注文一覧を取得する
         // タイムスタンプを表示することで、一度の注文かどうか判別
-        $orders = Testcart::select('user_id', $userId)->get();
-
+        $orders = Testcart::where('user_id', $userId)->get();
+        return $orders;
+        // タイムスタンプを基準に、分割して表示させたい
     }
 }

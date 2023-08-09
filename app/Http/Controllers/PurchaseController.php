@@ -17,8 +17,7 @@ class PurchaseController extends Controller
     {
         // 購入確定
         $cart = $service->totalCart(session()->all());
-        // dd($cart);
-        // cartの中身をテーブルに保存する 処理をサービスコンテナに移動させる？
+        // $cartの中身をテーブルに保存する
         DB::beginTransaction();
         try{
             foreach($cart as $key => $value){
@@ -31,16 +30,15 @@ class PurchaseController extends Controller
             }
             DB::commit();
             // テーブルに保存が完了したらセッションを削除する
+            // ログイン情報も消える
             $request->session()->flush();
         } catch(Exception $e) { // Illuminate\Database\QueryException
-            //dd($e);
             DB::rollback();
             return view('comfirmation')->with('cart', $cart)->with('error', "注文処理にエラーが発生しました。");
         }
 
-        // テーブルに保存したものをビューに渡す
-        // サービスコンテナにて処理作成中
-        $array = $service->orderHistory(auth()->id());
-        return "ok"; //view('confirmedOrder');
+        // 注文履歴を表示
+        $orderHistory = $service->orderHistory(auth()->id());
+        return view('confirmedOrder')->with('orderHistory', $orderHistory);
     }
 }

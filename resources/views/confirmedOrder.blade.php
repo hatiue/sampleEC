@@ -14,9 +14,11 @@
 	</div>
 	<div>
 		<h2>注文内容</h2>
+		<p>各注文はタイムスタンプをもとに分割する予定</p>
 		<table>
 			<thead>
 				<tr>
+					<th>注文日時</th>
 					<th>商品名</th>
 					<th>価格</th>
 					<th>個数</th>
@@ -28,16 +30,17 @@
 					$total = 0;
 					$items = 0;
 				?>
-				@foreach($cart as $item)
+				@foreach($orderHistory as $item)
 					<?php
-						$subtotal = $item["price"] * $item["quantity"];
+						$subtotal = $item->price * $item->quantity;
 						$total += $subtotal;
-						$items += $item["quantity"]
+						$items += $item->quantity
 					?>
 					<tr>
-						<td>{{ $item["name"] }}</td>
-						<td>{{ $item["price"] }}円</td>
-						<td>{{ $item["quantity"] }}個</td>
+						<td>{{ $item->created_at }}</td>
+						<td>{{ $item->name }}</td>
+						<td>{{ $item->price }}円</td>
+						<td>{{ $item->quantity }}個</td>
 						<td>{{ $subtotal }}円</td>
 					</tr>
 				@endforeach
